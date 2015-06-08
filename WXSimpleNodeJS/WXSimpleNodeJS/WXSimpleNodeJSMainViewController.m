@@ -48,12 +48,12 @@
     NSMutableURLRequest *httpRequest = [[NSMutableURLRequest alloc] initWithURL:url];
     [httpRequest setHTTPMethod:@"GET"];
     NSURLSessionConfiguration *conf = [NSURLSessionConfiguration defaultSessionConfiguration];
-    conf.timeoutIntervalForRequest = 5.0;
-    conf.timeoutIntervalForResource = 5.0;
+    conf.timeoutIntervalForRequest = 15.0;
+    conf.timeoutIntervalForResource = 15.0;
     conf.HTTPMaximumConnectionsPerHost = 1;
     conf.allowsCellularAccess = YES;
     NSURLSession *session = [NSURLSession sessionWithConfiguration:conf];
-    NSLog(@"start fetching message from the server..");
+    NSLog(@"start to fetch message from the server..");
     [[session dataTaskWithRequest:httpRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSLog(@" Got message from the server..");
         NSHTTPURLResponse * httpResponse = (NSHTTPURLResponse *)response;
@@ -61,9 +61,9 @@
             self.responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             self.responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
             if (!error) {
+                NSDictionary *address = self.responseDictionary[@"Address"];
                 NSString *name = self.responseDictionary[@"Name"];
                 NSString *group = self.responseDictionary[@"Group"];
-                NSDictionary *address = self.responseDictionary[@"Address"];
                 NSString *country = address[@"Country"];
                 NSString *province = address[@"Province"];
                 NSString *city = address[@"City"];
