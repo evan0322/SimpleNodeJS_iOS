@@ -11,7 +11,7 @@
 @interface WXSimpleNodeJSMainViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UILabel *responseStringLabel;
-@property (strong, nonatomic) IBOutlet UILabel *responseMessageLable;
+@property (strong, nonatomic) IBOutlet UILabel *responseMessageLabel;
 
 - (IBAction)getResponse:(id)sender;
 - (IBAction)clear:(id)sender;

@@ -21,6 +21,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.responseStringLabel.text = @"";
+    self.responseMessageLabel.text = @"";
     // Do any additional setup after loading the view.
 }
 
@@ -41,7 +43,7 @@
 
 - (IBAction)getResponse:(id)sender {
     self.responseStringLabel.text = @"Loading..";
-    self.responseMessageLable.text = @"Loading..";
+    self.responseMessageLabel.text = @"Loading..";
     NSURL *url = [[NSURL alloc] initWithString:@"https://wxsimplenodejs.herokuapp.com/entrust"];
     NSMutableURLRequest *httpRequest = [[NSMutableURLRequest alloc] initWithURL:url];
     [httpRequest setHTTPMethod:@"GET"];
@@ -66,21 +68,28 @@
                 NSString *province = address[@"Province"];
                 NSString *city = address[@"City"];
                 self.responseMessage = [NSString stringWithFormat:@"The company %@ belongs to group %@ and is located at %@, %@, %@. ", name,group,city,province,country];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.responseStringLabel.text = self.responseString;
-                    self.responseMessageLable.text = self.responseMessage;
-                });
+                [self setResponseStringLabelText:self.responseString andReponseMessageLabelText:self.responseMessage];
             } else {
                 NSLog(@"Fail to parse response from the server");
             }
         } else {
-            NSLog(@"Fail to get response from the server, error code:%ld",[httpResponse statusCode]);
+            NSString *errorMessage = [NSString stringWithFormat:@"Fail to get response from the server, error code:%ld",[httpResponse statusCode]];
+            NSLog(@"%@",errorMessage);
+            [self setResponseStringLabelText:@"" andReponseMessageLabelText:errorMessage];
         }
     }] resume];
 }
 
+- (void) setResponseStringLabelText:(NSString *)responseString andReponseMessageLabelText:(NSString *)responseMessage
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.responseStringLabel.text = responseString;
+        self.responseMessageLabel.text = responseMessage;
+    });
+}
+
 - (IBAction)clear:(id)sender {
     self.responseStringLabel.text = @"";
-    self.responseMessageLable.text = @"";
+    self.responseMessageLabel.text = @"";
 }
 @end
